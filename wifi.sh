@@ -4,7 +4,7 @@
 
 usage() {
 cat <<-EOF
-Usage: $0 [list|connect <essid>|stop]
+Usage: $0 [list|connect [essid]|stop]
 
 you must run it by root.
 EOF
@@ -18,11 +18,6 @@ fi
 connect() {
 	connect_file=/var/run/wireless.connect
 
-	if [ $# -ne 1 -o -z "$1" ]; then
-		usage
-		exit 1
-	fi
-
 	eval device=`_uci_config_get wireless.wifi-device.device`
 	eval driver=`_uci_config_get wireless.wifi-device.driver`
 
@@ -33,7 +28,7 @@ connect() {
 	cnt=`_uci_config_count wireless.wifi-iface`
 	for i in `seq 1 $cnt`; do
 		eval ssid=`_uci_config_get wireless.@wifi-iface[$i].ssid`
-		if [ x"$ssid" = x"$1" ]; then
+		if [ -z "$1" -o x"$ssid" = x"$1" ]; then
 			eval key=`_uci_config_get wireless.@wifi-iface[$i].key`
 			eval proto=`_uci_config_get wireless.@wifi-iface[$i].proto`
 			eval ipaddr=`_uci_config_get wireless.@wifi-iface[$i].ipaddr`
@@ -81,11 +76,7 @@ case "x$1" in
 	list
 	;;
 "xconnect")
-	if [ $# -ne 2 -o -z "$2" ]; then
-		usage
-	else
-		connect "$2"
-	fi
+	connect "$2"
 	;;
 "xstop")
 	stop
