@@ -2,7 +2,7 @@ config wifi-device
 	option device 'eth1'
 	option driver 'wext'
 
-#config wifi-iface
+#config wifi-iface 'home'
 #	option ssid 'ap1'
 #	option key 'password1'
 #	option proto 'static'
@@ -11,7 +11,7 @@ config wifi-device
 #	option gateway '172.25.24.1'
 #	option dns '4.2.2.2 8.8.8.8 172.25.24.1'
 #
-#config wifi-iface
+#config wifi-iface 'office'
 #	option ssid 'ap2'
 #	option key 'password2'
 #	option proto 'dhcp'

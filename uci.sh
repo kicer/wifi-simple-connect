@@ -25,7 +25,12 @@ _uci_config_get() {
 
 	config_nr=$(awk "/^\s*config\s+$config_name/ {printf NR \" \"}" "$file" | awk "{print \$$config_index}")
 	config_next=$(awk "/^\s*config\s+\w*/ {if(NR > $config_nr) printf NR \" \"}" "$file" | awk '{print $1}')
-	
+
+	if [ -z "$option" ]; then
+		awk "{if(NR == $config_nr)"'{$1=$1; print $0}}' $file | awk "BEGIN {FPAT=\"([^ ]+)|('[^']+')\"} {print \$3}"
+		return 0
+	fi
+
 	if [ ! -z "$config_next" ]; then
 		awk "{if((NR>$config_nr) && (NR<$config_next)) "'print $0}' $file
 	else

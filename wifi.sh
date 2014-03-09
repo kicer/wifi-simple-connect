@@ -1,10 +1,10 @@
 #!/bin/sh
 
-. /lib/functions/uci.sh
+. ./uci.sh
 
 usage() {
 cat <<-EOF
-Usage: $0 [list|connect [ssid]|stop]
+Usage: $0 [list|connect [ssid|iface]|stop]
 
 you must run it by root.
 EOF
@@ -28,7 +28,8 @@ connect() {
 	cnt=`_uci_config_count wireless.wifi-iface`
 	for i in `seq 1 $cnt`; do
 		eval ssid=`_uci_config_get wireless.@wifi-iface[$i].ssid`
-		if [ -z "$1" -o x"$ssid" = x"$1" ]; then
+		eval iface=`_uci_config_get wireless.@wifi-iface[$i]`
+		if [ -z "$1" -o x"$ssid" = x"$1" -o x"$iface" = x"$1" ]; then
 			eval key=`_uci_config_get wireless.@wifi-iface[$i].key`
 			eval proto=`_uci_config_get wireless.@wifi-iface[$i].proto`
 			eval ipaddr=`_uci_config_get wireless.@wifi-iface[$i].ipaddr`
@@ -61,9 +62,13 @@ connect() {
 }
 
 list() {
+	printf "%-12s\t%s\n" "iface" "ssid"
+	printf "%-12s\t%s\n" "-----" "----"
 	cnt=`_uci_config_count wireless.wifi-iface`
 	for i in `seq 1 $cnt`; do
-		_uci_config_get wireless.@wifi-iface[$i].ssid
+		eval iface=`_uci_config_get wireless.@wifi-iface[$i]`
+		eval ssid=`_uci_config_get wireless.@wifi-iface[$i].ssid`
+		printf "%-12s\t%s\n" "$iface" "$ssid"
 	done
 }
 
