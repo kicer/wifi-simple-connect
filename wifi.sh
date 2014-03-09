@@ -1,6 +1,7 @@
 #!/bin/sh
 
-. ./uci.sh
+#. ./uci.sh
+. /lib/functions/uci.sh
 
 usage() {
 cat <<-EOF
@@ -46,8 +47,12 @@ connect() {
 	if [ "xdhcp" = x"$proto" ]; then
 		dhclient -v $device
 	elif [ "xstatic" = x"$proto" ]; then
-		if [ ! -z "$ipaddr" -a ! -z "$netmask" ]; then
-			ifconfig $device $ipaddr netmask $netmask
+		if [ ! -z "$ipaddr" ]; then
+			if [ ! -z "$netmask" ]; then
+				ifconfig $device $ipaddr netmask $netmask
+			else
+				ifconfig $device $ipaddr
+			fi
 		fi
 		if [ ! -z "$gateway" ]; then
 			ip route add default via $gateway dev $device 2>/dev/null
