@@ -4,7 +4,7 @@
 
 usage() {
 cat <<-EOF
-Usage: $0 [list|connect [essid]|stop]
+Usage: $0 [list|connect [ssid]|stop]
 
 you must run it by root.
 EOF
@@ -39,11 +39,11 @@ connect() {
 		fi
 	done
 
-	/usr/bin/wpa_passphrase "$ssid" "$key" > "$connect_file"
-	/sbin/wpa_supplicant -B -i $device -c "$connect_file" -D$driver 2>/dev/null
+	wpa_passphrase "$ssid" "$key" > "$connect_file"
+	wpa_supplicant -B -i $device -c "$connect_file" -D$driver 2>/dev/null
 
 	if [ "xdhcp" = x"$proto" ]; then
-		/sbin/dhclient -v $device
+		dhclient -v $device
 	elif [ "xstatic" = x"$proto" ]; then
 		if [ ! -z "$ipaddr" -a ! -z "$netmask" ]; then
 			ifconfig $device $ipaddr netmask $netmask

@@ -1,9 +1,12 @@
-wifi simple connect
+WiFi Simple Connect
 ===================
 
 DESCRIPTION
 -----------
-	wifi connect script, use uci-style configure file.
+	WiFi connect script, use uci-style configure file.
+	use wpa_passphrase/wpa_supplicant/dhclient/ifconfig/ip to make connect,
+	use awk to parse configure file.
+	
 
 INSTALL
 -----------
@@ -11,8 +14,8 @@ INSTALL
 
 USAGE
 -----------
-	# wifi.sh [list|connect [ssid]|stop]
+	# ./wifi.sh [list|connect [ssid]|stop]
 
 FILES
 -----------
-	/etc/config/wireless, /lib/functions/uci.sh
+	/etc/config/wireless, /lib/functions/uci.sh, /var/run/wireless.connect
