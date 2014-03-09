@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. /lib/functions/common.sh
+. /lib/functions/uci.sh
 
 usage() {
 cat <<-EOF
